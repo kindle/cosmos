@@ -1,0 +1,7 @@
+{
+  "name": "atlas",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
