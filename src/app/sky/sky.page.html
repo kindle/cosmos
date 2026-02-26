@@ -21,6 +21,10 @@
             <ion-checkbox labelPlacement="start" [(ngModel)]="showInteractionGuide" (ionChange)="onConfigChange()">Interaction Area</ion-checkbox>
           </ion-item>
           
+          <ion-item lines="none">
+            <ion-checkbox labelPlacement="start" [(ngModel)]="showTimeControl" (ionChange)="onConfigChange()">Time Control</ion-checkbox>
+          </ion-item>
+
           <ion-radio-group *ngIf="showConstellationLines" [(ngModel)]="lineVisibilityMode" (ionChange)="onConfigChange()">
             <ion-list-header>
               <ion-label>Line Visibility</ion-label>
@@ -76,8 +80,8 @@
   <div class="filter"></div>
   <div #rendererContainerSky class="sky-container"></div>
   
-  <div class="time-control-container">
-    <div class="time-display">{{ formattedTime }}</div>
+  <div class="time-control-container" *ngIf="showTimeControl">
+    <div class="time-display-local">{{ formattedTime }} | {{ formattedLocalTime }}</div>
     <ion-range 
       min="-720" 
       max="720" 

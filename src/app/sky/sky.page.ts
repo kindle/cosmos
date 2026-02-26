@@ -26,6 +26,7 @@ export class SkyPage implements OnInit, AfterViewInit {
   showConstellationNames = true;
   showConstellationLines = true;
   showInteractionGuide = true; // New control property
+  showTimeControl = true;
   lineVisibilityMode = 'auto'; // 'always' or 'auto'
   brightnessAdjustment = 0; // Range -5 to 5
   language: string = 'en';
@@ -77,11 +78,38 @@ export class SkyPage implements OnInit, AfterViewInit {
     this.timeOffset = event.detail.value;
     const offsetMs = this.timeOffset * 60 * 1000;
     this.viewDate = new Date(this.anchorDate.getTime() + offsetMs);
+    this.updateLocation();
   }
 
   get formattedTime(): string {
     // Return GMT time string
     return this.viewDate.toUTCString().replace('GMT', '(GMT)');
+  }
+
+  get formattedLocalTime(): string {
+    return this.viewDate.toLocaleString();
+  }
+
+  // Calculate Greenwich Mean Sidereal Time (in degrees)
+  getGMST(date: Date): number {
+    // Julian Date calculation
+    // JS dates are ms since 1970-01-01. J2000 is 2000-01-01 12:00 UT.
+    // Days since J2000.0
+    // J2000 timestamp: 946728000000 ms
+    const time = date.getTime();
+    const jd = (time / 86400000) + 2440587.5;
+    const d = jd - 2451545.0;
+    
+    // GMST formula (approximated)
+    // GMST = 18.697374558 + 24.06570982441908 * d
+    let gmst = 18.697374558 + 24.06570982441908 * d;
+    
+    // Normalize to 0-24
+    gmst = gmst % 24;
+    if (gmst < 0) gmst += 24;
+    
+    // Convert to degrees (1h = 15deg)
+    return gmst * 15; 
   }
 
   ngOnInit() {
@@ -118,6 +146,9 @@ export class SkyPage implements OnInit, AfterViewInit {
     const showInteractionGuide = localStorage.getItem('sky_showInteractionGuide');
     if (showInteractionGuide !== null) this.showInteractionGuide = JSON.parse(showInteractionGuide);
 
+    const showTimeControl = localStorage.getItem('sky_showTimeControl');
+    if (showTimeControl !== null) this.showTimeControl = JSON.parse(showTimeControl);
+
     const lineVisibilityMode = localStorage.getItem('sky_lineVisibilityMode');
     if (lineVisibilityMode !== null) {
       this.lineVisibilityMode = lineVisibilityMode;
@@ -149,6 +180,7 @@ export class SkyPage implements OnInit, AfterViewInit {
     localStorage.setItem('sky_showConstellationNames', JSON.stringify(this.showConstellationNames));
     localStorage.setItem('sky_showConstellationLines', JSON.stringify(this.showConstellationLines));
     localStorage.setItem('sky_showInteractionGuide', JSON.stringify(this.showInteractionGuide));
+    localStorage.setItem('sky_showTimeControl', JSON.stringify(this.showTimeControl));
     localStorage.setItem('sky_lineVisibilityMode', this.lineVisibilityMode);
     localStorage.setItem('sky_brightnessAdjustment', this.brightnessAdjustment.toString());
     localStorage.setItem('sky_language', this.language);
@@ -766,18 +798,36 @@ export class SkyPage implements OnInit, AfterViewInit {
     const loc = this.locations[this.selectedLocationIndex];
     if (!loc) return;
     
-    console.log('Updating location to:', loc.name);
+    // console.log('Updating location to:', loc.name);
 
     // 1. Calculate the User's Local Zenith in Celestial Coordinates (Where stars are defined)
-    // Our star data uses Z as Celestial North Pole. 
-    // Converting sets of (Lat, Lon) to a vector on the unit sphere (Z-up system):
-    const latRad = THREE.MathUtils.degToRad(loc.lat);
-    const lonRad = THREE.MathUtils.degToRad(loc.lon);
+    // Celestial Coordinates:
+    // Z-axis = North Celestial Pole
+    // X-axis = Vernal Equinox (RA=0, Dec=0)
+    // Y-axis = RA=6h, Dec=0
     
-    // In celestial coordinates (Z=North), the Zenith vector is:
+    // The Zenith vector in Celestial Coordinates depends on Latitude and Local Sidereal Time (LST).
+    // Zenith Dec = Latitude.
+    // Zenith RA  = Local Sidereal Time (LST).
+
+    // Calculate LST
+    // GMST (Greenwich Mean Sidereal Time)
+    const gmstDeg = this.getGMST(this.viewDate);
+    // LST = GMST + Longitude (East is positive)
+    const lstDeg = gmstDeg + loc.lon;
+    
+    const latRad = THREE.MathUtils.degToRad(loc.lat);
+    const lstRad = THREE.MathUtils.degToRad(lstDeg);
+    
+    // In celestial coordinates (Z=North):
+    // Standard spherical -> Cartesian (radius=1)
+    // x = cos(Lat) * cos(LST)
+    // y = cos(Lat) * sin(LST)
+    // z = sin(Lat)
+    
     const celestialZenith = new THREE.Vector3(
-      Math.cos(latRad) * Math.cos(lonRad),
-      Math.cos(latRad) * Math.sin(lonRad),
+      Math.cos(latRad) * Math.cos(lstRad),
+      Math.cos(latRad) * Math.sin(lstRad),
       Math.sin(latRad)
     ).normalize();
 
@@ -813,7 +863,7 @@ export class SkyPage implements OnInit, AfterViewInit {
     }
     
     // 4. Calculate World North Direction for Camera LookAt
-    // Celestial North Pole is (0,0,1) in Local Celestial Space.
+    // Celestial North Pole is (0,0,1) in Celestial Group Local Space.
     // We transform it to World Space using the group's rotation.
     const localNorth = new THREE.Vector3(0, 0, 1);
     const worldNorth = localNorth.clone().applyQuaternion(quaternion);
@@ -823,51 +873,17 @@ export class SkyPage implements OnInit, AfterViewInit {
     const hNorth = new THREE.Vector3(worldNorth.x, 0, worldNorth.z).normalize();
     
     // Handle singularity at Poles (if hNorth length is near 0)
-    // If at North Pole, Zenith=(0,0,1). WorldUp=(0,1,0). 
-    // celestialZenith=(0,0,1).
-    // Rotation Z->Y. (Rotate -90 deg around X).
-    // Then LocalNorth(0,0,1) rotates to (0,1,0) (World Y).
-    // Projection on XZ is (0,0,0). Undefined.
-    // We can pick arbitrary direction as North (e.g. -Z).
     if (hNorth.lengthSq() < 0.001) {
        hNorth.set(0, 0, -1); 
     }
     
-    // Now that we have hNorth (World XZ), align the Zenith Dot (Cross)
+    // Update Zenith Dot/Cross Alignment to match hNorth
     if (this.zenithDot) {
-        // The cross is originally built where arms are in XZ plane.
-        // And position is (0,2,0).
-        // If we just lookAt(target), the "forward" vector (-Z usually in Three) points to target.
-        // Wait, default +Z is Forward? No, Three.js default lookAt uses -Z as forward.
-        // If I built NS arm along Z axis.
-        // World North is hNorth.
-        // If I lookAt(pos + hNorth). The object's -Z axis will point to hNorth.
-        // If my NS arm is along Z. Then +Z points AWAY from North. -Z points TO North.
-        // This is correct alignment for North-South arm.
-        
-        // EW arm is along X.
-        // If -Z points North. Then +X points West?
-        // Right Hand Rule: X cross Y = Z.
-        // If -Z is North (Forward). Y is Up.
-        // Then X is Right?
-        // North (0,0,-1). Up (0,1,0). North x Up = (-1,0,0) = -X = East?
-        // Let's check coordinates.
-        // In Three.js: +X Right, +Y Up, +Z Back (towards viewer).
-        // -Z is Forward (into screen).
-        // So North = -Z. East = +X?
-        // Let's assume standard map.
-        // hNorth is a vector.
-        
-        // Let's ensure alignment.
         const target = this.zenithDot.position.clone().add(hNorth);
         this.zenithDot.lookAt(target);
-        
-        // Wait, lookAt aligns the -Z axis of the object to point at target.
-        // If I want the arm corresponding to global North to point North.
-        // And the arm is the Z-axis box.
-        // Then the Z-axis box aligns with North-South line. This works.
     }
-
+    
+    // Update Nadir Dot Alignment
     if (this.nadirDot) {
          this.nadirDot.position.copy(this.zenith).negate().multiplyScalar(2.0);
          const target = this.nadirDot.position.clone().add(hNorth);
@@ -882,25 +898,8 @@ export class SkyPage implements OnInit, AfterViewInit {
         .add(worldUp.clone().multiplyScalar(Math.sin(elevationAngle)))
         .normalize();
     
-    // Position camera slightly opposite to view direction to look at center? 
-    // No, we are inside looking out. Camera at (0,0,0).
-    // But OrbitControls works better if we look AT something.
-    // Let's look FROM (0,0,0) towards 'viewDir'.
-    // Actually OrbitControls rotates the Camera around Target.
-    // If Target=(0,0,0) and Camera is at (0,0,0), it glitches.
-    // Camera must be offset?
-    // User wants to be "on the ground".
-    // If the sphere is infinite (background), Position (0,0,0) is fine.
-    // But `OrbitControls` rotates the CAMERA around TARGET.
-    // If we want to simulate "Head Rotation", we should put Camera at (0,0,0) and Target at (0,0, -1).
-    // Standard FirstView control.
-    // BUT we are using `OrbitControls`.
-    // Common trick: Camera at (0.01, 0, 0) looking at (0,0,0).
-    // Then dragging rotates the world? 
-    // OrbitControls: Dragging rotates the CAMERA around the TARGET.
-    // If we want "Horizontal Drag = Horizontal Rotation", we want OrbitControls to orbit around Y-axis.
-    // This works automatically if Camera Up is Y (Standard).
-    
+    // Position camera just slightly away from center along the view vector (reversed)
+    // so that looking at (0,0,0) aligns with the desired direction.
     const dist = 0.01;
     this.camera.position.copy(viewDir.clone().negate().multiplyScalar(dist));
     this.camera.up.set(0, 1, 0); // Enforce World Up
