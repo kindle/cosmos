@@ -1,0 +1,52 @@
+from gaia_get_star_info import fetch_and_print_star_data
+
+
+# 1. Resolve Aries star names to precise ICRS positions via SIMBAD
+names = [
+    "Alpha Ari",
+    "Beta Ari",
+    "Gamma Ari", # Mesarthim
+    "Delta Ari",
+    "Epsilon Ari",
+    "Zeta Ari",
+    "Eta Ari",
+    "Theta Ari",
+    "Iota Ari",
+    "Kappa Ari",
+    "Lambda Ari",
+    "Mu Ari",
+    "Nu Ari",
+    "Xi Ari",
+    "Omicron Ari",
+    "Pi Ari",
+    "Rho1 Ari",
+    "Rho2 Ari",
+    "Sigma Ari",
+    "Tau1 Ari",
+    "Tau2 Ari",
+    "41 Ari",
+    "39 Ari",
+    "35 Ari",
+    "33 Ari",
+    "53 Ari",
+    "30 Ari",
+    "31 Ari",
+    "36 Ari",
+    "38 Ari",
+    "40 Ari",
+    "45 Ari",
+    "47 Ari",
+    "51 Ari",
+    "52 Ari",
+    "54 Ari",
+    "56 Ari",
+    "63 Ari",
+    "65 Ari",
+    "1 Ari",
+    "10 Ari",
+    "14 Ari",
+    "19 Ari",
+    "27 Ari",
+]
+
+fetch_and_print_star_data(names)

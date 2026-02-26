@@ -1,0 +1,15 @@
+以下是具体的星星列表（包含中英文对照）：
+
+星座 (Constellation)	主要亮星 (Bright Stars)
+白羊座 (Aries)	Alpha Ari (娄宿三), Beta Ari (娄宿一), Gamma Ari (娄宿二), Delta Ari (胃宿三), 41 Ari (胃宿一)
+金牛座 (Taurus)	Alpha Tau (毕宿五), Beta Tau (五车五), Eta Tau (昴宿六), Zeta Tau (天关), Epsilon Tau (毕宿一), Lambda Tau
+双子座 (Gemini)	Alpha Gem (北河二), Beta Gem (北河三), Gamma Gem (井宿三), Delta Gem (天樽二), Epsilon Gem (井宿五), Zeta Gem (井宿七), Eta Gem (钺), Mu Gem (井宿一)
+巨蟹座 (Cancer)	Alpha Cnc (柳宿增三), Beta Cnc (柳宿增十), Delta Cnc (鬼宿四), Gamma Cnc (鬼宿三), Iota Cnc (柳宿增八)
+狮子座 (Leo)	Alpha Leo (轩辕十四), Beta Leo (五帝座一), Gamma Leo (轩辕十二), Delta Leo (西上相), Epsilon Leo (轩辕九), Zeta Leo (轩辕十), Theta Leo (太微右垣三)
+处女座 (Virgo)	Alpha Vir (角宿一), Beta Vir (右更二), Gamma Vir (东上相), Delta Vir (东次相), Epsilon Vir (东次将), Zeta Vir (角宿二)
+天秤座 (Libra)	Alpha Lib (氐宿一), Beta Lib (氐宿四), Gamma Lib (氐宿三), Sigma Lib (折威七)
+天蝎座 (Scorpius)	Alpha Sco (心宿二/大火), Beta Sco (房宿四), Delta Sco (房宿三), Epsilon Sco (尾宿二), Theta Sco (尾宿五), Lambda Sco (尾宿八), Upsilon Sco (尾宿九)
+射手座 (Sagittarius)	Alpha Sgr (天渊三), Beta Sgr (天渊一/二), Gamma Sgr (箕宿一), Delta Sgr (箕宿二), Epsilon Sgr (箕宿三), Lambda Sgr (斗宿二), Zeta Sgr (斗宿六), Sigma Sgr (斗宿四)
+摩羯座 (Capricornus)	Alpha Cap (牛宿二), Beta Cap (牛宿一), Gamma Cap (垒壁阵三), Delta Cap (垒壁阵四)
+水瓶座 (Aquarius)	Alpha Aqr (危宿一), Beta Aqr (虚宿一), Gamma Aqr (坟墓一), Delta Aqr (羽林军二十六), Epsilon Aqr (女宿一), Zeta Aqr (坟墓二), Theta Aqr (羽林军三十)
+双鱼座 (Pisces)	Alpha Psc (外屏七), Beta Psc (霹雳五), Gamma Psc (霹雳二), Delta Psc (外屏一), Eta Psc (右更四), Omega Psc (雷电一)

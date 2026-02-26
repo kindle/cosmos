@@ -1,0 +1,15 @@
+[
+    {
+        "id": "1",
+        "c":"Big Dipper",
+        "ra": 1,
+        "dec": 3,
+        "x": 2,"y":2,"z":3,"b": 20,
+        "en":"",
+        "zh":"",
+        "bayer_designation":"",
+        "bright_star_catalogue":"",
+        "hipparcos":"",
+        "desc":""
+    }
+]

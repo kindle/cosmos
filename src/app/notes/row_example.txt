@@ -1,0 +1,4 @@
+ MAIN_ID        RA           DEC      RA_PREC DEC_PREC COO_ERR_MAJA COO_ERR_MINA COO_ERR_ANGLE COO_QUAL COO_WAVELENGTH     COO_BIBCODE         RA_d        DEC_d     SCRIPT_NUMBER_ID
+             "h:m:s"       "d:m:s"                         mas          mas           deg                                                      deg          deg                      
+--------- ------------- ------------- ------- -------- ------------ ------------ ------------- -------- -------------- ------------------- ------------ ------------ ----------------
+* gam Aqr 22 21 39.3715 -01 23 14.457      14       14        0.520        0.420            90        A              O 2020yCat.1350....0G 335.41404820  -1.38734919                3

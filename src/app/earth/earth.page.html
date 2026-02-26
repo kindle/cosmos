@@ -1,0 +1,16 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Earth</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="world" (panstart)="panstart($event)" (panend)="panend($event)" (pan)="pan($event)">
+      <div class="world-bg"></div>
+      <div class="world-globe">
+          <div class="world-globe-pole"></div>
+          <div class="world-globe-doms-container"></div>
+          <div class="world-globe-halo"></div>
+      </div>
+  </div>
+</ion-content>

@@ -1,0 +1,140 @@
+html,
+body {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+body {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-filter: contrast(120%);
+    filter: contrast(120%);
+    background-color: black;
+}
+.container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-image: -webkit-radial-gradient(70% 120%, 1600px, rgba(33, 39, 80, 1) 10%, #020409 100%);
+    background-image: radial-gradient(1600px at 70% 120%, rgba(33, 39, 80, 1) 10%, #020409 100%);
+}
+.content {
+    width: inherit;
+    height: inherit;
+    position: fixed;
+}
+#universe {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0px;
+    height: 300px;
+    width: 100%;
+}
+#scene {
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    margin-left: -800px;
+}
+
+.home-title{
+    position: fixed;
+    top: 25%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 60px;
+    text-align: center;
+    width: 100%;
+    padding: 0 15px;
+}
+
+@media all and (orientation: portrait){
+    .home-action-start{
+        font-family: Georgia, serif;
+        font-style: italic;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 35px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .home-action-classic{
+        font-family: Georgia, serif;
+        font-style: italic;
+        position: fixed;
+        top: 45%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 35px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .home-action-adventure{
+        font-family: Georgia, serif;
+        font-style: italic;
+        position: fixed;
+        top: 55%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 35px;
+        text-align: center;
+        width: 100%;
+    }
+}
+@media all and (orientation: landscape){
+    .home-action-start{
+        font-family: Georgia, serif;
+        font-style: italic;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 35px;
+        text-align: center;
+        width: 100%;
+    }
+    .home-action-classic{
+        font-family: Georgia, serif;
+        font-style: italic;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 35px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .home-action-adventure{
+        font-family: Georgia, serif;
+        font-style: italic;
+        position: fixed;
+        top: 65%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 35px;
+        text-align: center;
+        width: 100%;
+    }
+}

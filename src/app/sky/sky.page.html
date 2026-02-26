@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>sky {{cameraPositionText}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button id="config-trigger">Config</ion-button>
+    </ion-buttons>
+    <ion-popover trigger="config-trigger" triggerAction="click">
+      <ng-template>
+        <ion-content class="ion-padding">
+          <ion-item lines="none">
+            <ion-checkbox labelPlacement="start" [(ngModel)]="showLabels" (ionChange)="onConfigChange()">Show Labels</ion-checkbox>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-checkbox labelPlacement="start" [(ngModel)]="showConstellationNames" (ionChange)="onConfigChange()">Show Constellations</ion-checkbox>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-checkbox labelPlacement="start" [(ngModel)]="showConstellationLines" (ionChange)="onConfigChange()">Constellation Lines</ion-checkbox>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-checkbox labelPlacement="start" [(ngModel)]="showInteractionGuide" (ionChange)="onConfigChange()">Interaction Area</ion-checkbox>
+          </ion-item>
+          
+          <ion-radio-group *ngIf="showConstellationLines" [(ngModel)]="lineVisibilityMode" (ionChange)="onConfigChange()">
+            <ion-list-header>
+              <ion-label>Line Visibility</ion-label>
+            </ion-list-header>
+            <ion-item lines="none">
+              <ion-label>Always Visible</ion-label>
+              <ion-radio slot="end" value="always"></ion-radio>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>Auto-Fade (Interactive)</ion-label>
+              <ion-radio slot="end" value="auto"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+
+          <ion-item lines="none">
+            <ion-select label="Location" label-placement="stacked" [(ngModel)]="selectedLocationIndex" (ionChange)="onLocationChange()">
+              <ion-select-option *ngFor="let loc of locations; let i = index" [value]="i">
+                {{ loc.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-label position="stacked">Star Brightness: {{brightnessAdjustment}}</ion-label>
+            <ion-range min="-5" max="5" step="0.5" snaps="true" [(ngModel)]="brightnessAdjustment" (ionChange)="onConfigChange()">
+              <ion-icon slot="start" name="sunny-outline" size="small"></ion-icon>
+              <ion-icon slot="end" name="sunny" size="small"></ion-icon>
+            </ion-range>
+          </ion-item>
+          <ion-radio-group [(ngModel)]="language" (ionChange)="onConfigChange()">
+            <ion-item lines="none">
+              <ion-label>English</ion-label>
+              <ion-radio slot="end" value="en"></ion-radio>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label>中文</ion-label>
+              <ion-radio slot="end" value="zh"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">sky {{cameraPositionText}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="landscape"></div>
+  <div class="filter"></div>
+  <div #rendererContainerSky class="sky-container"></div>
+  
+  <div class="time-control-container">
+    <div class="time-display">{{ formattedTime }}</div>
+    <ion-range 
+      min="-720" 
+      max="720" 
+      step="5" 
+      [value]="timeOffset" 
+      (ionInput)="onTimeChange($event)"
+      [pin]="true" 
+      [ticks]="false" 
+      [snaps]="true">
+      <ion-icon size="small" slot="start" name="time-outline"></ion-icon>
+      <ion-icon size="small" slot="end" name="time"></ion-icon>
+    </ion-range>
+  </div>
+</ion-content>

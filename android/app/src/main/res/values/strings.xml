@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">atlas</string>
+    <string name="title_activity_main">atlas</string>
+    <string name="package_name">com.reddah.atlas</string>
+    <string name="custom_url_scheme">com.reddah.atlas</string>
+</resources>
