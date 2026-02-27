@@ -66,6 +66,20 @@ export class SkyPage implements OnInit, AfterViewInit {
   isUserInteracting = false;
   activeConstellations = new Set<string>(); // Names of constellations to show
   
+  showLayerControl = false;
+  layerItems = [
+    { icon: 'star-outline', label: 'Stars' },
+    { icon: 'planet-outline', label: 'Planets' },
+    { icon: 'moon-outline', label: 'Moon' },
+    { icon: 'sunny-outline', label: 'Sun' },
+    { icon: 'cloud-outline', label: 'Nebulas' },
+    { icon: 'telescope-outline', label: 'Scope' },
+    { icon: 'navigate-outline', label: 'Comets' },
+    { icon: 'rocket-outline', label: 'Sats' },
+    { icon: 'globe-outline', label: 'Grid' },
+    { icon: 'settings-outline', label: 'Setup' }
+  ];
+
   constructor(private ngZone: NgZone, private dataService: DataService, private alertController: AlertController) {
     this.constellations = this.dataService.getConstellations();
     // Initialize viewDate to anchorDate (GMT logic handled in display)
@@ -79,6 +93,10 @@ export class SkyPage implements OnInit, AfterViewInit {
     const offsetMs = this.timeOffset * 60 * 1000;
     this.viewDate = new Date(this.anchorDate.getTime() + offsetMs);
     this.updateLocation();
+  }
+
+  toggleLayerControl() {
+    this.showLayerControl = !this.showLayerControl;
   }
 
   get formattedTime(): string {
@@ -500,7 +518,7 @@ export class SkyPage implements OnInit, AfterViewInit {
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
 
-    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 2000);
+    this.camera = new THREE.PerspectiveCamera(120, width / height, 0.01, 2000);
     
     // Controls setup
     // Note: Controls target and camera position are updated in updateLocation()

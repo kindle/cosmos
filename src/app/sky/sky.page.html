@@ -80,8 +80,13 @@
   <div class="filter"></div>
   <div #rendererContainerSky class="sky-container"></div>
   
-  <div class="time-control-container" *ngIf="showTimeControl">
-    <div class="time-display-local">{{ formattedTime }} | {{ formattedLocalTime }}</div>
+  <div class="time-control-container" *ngIf="showTimeControl && !showLayerControl">
+    <div class="control-header">
+      <ion-button fill="clear" size="small" (click)="toggleLayerControl()">
+        <ion-icon name="layers-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <div class="time-display-local">{{ formattedLocalTime }}</div>
+    </div>
     <ion-range 
       min="-720" 
       max="720" 
@@ -94,5 +99,22 @@
       <ion-icon size="small" slot="start" name="time-outline"></ion-icon>
       <ion-icon size="small" slot="end" name="time"></ion-icon>
     </ion-range>
+  </div>
+
+  <div class="layer-header-external" *ngIf="showTimeControl && showLayerControl">
+    <ion-button fill="clear" size="small" (click)="toggleLayerControl()">
+      <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div class="layer-control-container" *ngIf="showTimeControl && showLayerControl">
+    <div class="layer-grid">
+      <div class="layer-item" *ngFor="let item of layerItems">
+        <ion-button fill="clear">
+          <ion-icon [name]="item.icon" slot="icon-only"></ion-icon>
+        </ion-button>
+        <span class="layer-label">{{ item.label }}</span>
+      </div>
+    </div>
   </div>
 </ion-content>
