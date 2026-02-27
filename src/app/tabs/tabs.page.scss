@@ -1,4 +1,69 @@
 ion-tab-bar {
   --color: #a6a6a6;
   --color-selected: var(--ion-color-primary);
+  --background: #ffffff; /* Tab bar background */
+  position: relative;
+  border-top: none;
+  box-shadow: 0 -1px 10px rgba(0,0,0,0.05);
+
+  ion-tab-button {
+    --background: transparent;
+    z-index: 2; /* Content above highlight */
+    
+    ion-icon, ion-label {
+      position: relative;
+      z-index: 3;
+    }
+  }
+}
+
+/* The moving highlight container */
+.tab-highlight {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  width: calc(100% / 3); /* Assuming 3 tabs */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1; /* Behind buttons */
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* The spacing/shape for the gray background */
+.tab-highlight .highlight-bg {
+  width: 44px; /* Square shape */
+  height: 44px; /* Square shape */
+  background: #f0f0f0; /* Light gray */
+  border-radius: 12px;
+  position: relative; /* Relative for positioning children */
+}
+
+/* The orange line at bottom */
+.tab-highlight .highlight-line {
+  /* Line inside the background logically */
+  width: 24px; /* Approx icon width */
+  height: 3px;
+  background: #ff9800; /* Orange */
+  border-radius: 2px;
+  position: absolute;
+  bottom: 3px; /* Tightly inside, respecting border radius curvature */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Movement Logic based on classes added by TS */
+ion-tab-bar.selected-tab1 .tab-highlight {
+  transform: translateX(0%);
+}
+
+ion-tab-bar.selected-tab2 .tab-highlight {
+  transform: translateX(100%);
+}
+
+ion-tab-bar.selected-tab3 .tab-highlight {
+  transform: translateX(200%);
 }

@@ -1,6 +1,11 @@
-<ion-tabs>
+<ion-tabs #tabs (ionTabsDidChange)="setCurrentTab()">
 
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" [class.selected-tab1]="selectedTab === 'tab1'" [class.selected-tab2]="selectedTab === 'tab2'" [class.selected-tab3]="selectedTab === 'tab3'">
+    <div class="tab-highlight">
+      <div class="highlight-bg">
+        <div class="highlight-line"></div>
+      </div>
+    </div>
     <ion-tab-button tab="tab1" href="/tabs/tab1">
       <ion-icon aria-hidden="true" name="home"></ion-icon>
       <ion-label></ion-label>
